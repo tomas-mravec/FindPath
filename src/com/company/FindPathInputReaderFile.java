@@ -10,7 +10,7 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
 
     FindPathInputReaderFile(){}
 
-    public char[][] getInput() throws IOException {
+    public char[] getInput() throws IOException {
         BufferedReader bufReader = new BufferedReader(new FileReader("dictionary.txt"));
         ArrayList<String> dictionary = new ArrayList<>();
 
@@ -21,11 +21,15 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
         }
 
         bufReader.close();
-        return new char[1][1];
+        return new char[1];
     }
 
     public void printInput() {
 
     }
+
+    public int getRows() {return 0;}
+    public int getColumns() {return 0;}
+    public int getStart() {return 0;}
 }
 
