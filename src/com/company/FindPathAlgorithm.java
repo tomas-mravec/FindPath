@@ -50,9 +50,7 @@ public class FindPathAlgorithm {
 
     public void startAlgorithm() {
         setUp();
-        //int i = 0;
         while(!checkAllVisited()) {
-            //i++;
             showMaze();
             r = checkCurrentVertex();
             showShortestPaths();
@@ -60,39 +58,51 @@ public class FindPathAlgorithm {
             checkNeighbours();
         }
         findShortestPath();
-
-        //este zistenie ze nema riesenie, subory a unittest
     }
 
     private void findShortestPath() {
         String shortestPath = "";
         int pathPosition = endPos;
         System.out.println("Looking for shortest path");
-        //check if up
-        while (pathPosition != start) {
-            if (x[pathPosition] == pathPosition - columns) {
-                shortestPath += "d";
-                pathPosition = pathPosition - columns;
-            }
+        if(d[endPos] == Integer.MAX_VALUE) {
+            System.out.println("Error, no direct path between Start and End");
+        } else {
 
-            //check if right
-            else if (x[pathPosition] == pathPosition + 1) {
-                shortestPath += "l";
-                pathPosition = pathPosition + 1;
-            }
+            //check if up
+            while (pathPosition != start) {
+                if (x[pathPosition] == pathPosition - columns) {
+                    shortestPath += "d";
+                    pathPosition = pathPosition - columns;
+                }
 
-            //check down
-            else if (x[pathPosition] == pathPosition + columns) {
-                shortestPath += "u";
-                pathPosition = pathPosition + columns;
+                //check if right
+                else if (x[pathPosition] == pathPosition + 1) {
+                    shortestPath += "l";
+                    pathPosition = pathPosition + 1;
+                }
+
+                //check down
+                else if (x[pathPosition] == pathPosition + columns) {
+                    shortestPath += "u";
+                    pathPosition = pathPosition + columns;
+                }
+                //check if left
+                else if (x[pathPosition] == pathPosition - 1) {
+                    shortestPath += "r";
+                    pathPosition = pathPosition - 1;
+                }
             }
-            //check if left
-            else if (x[pathPosition] == pathPosition - 1) {
-                shortestPath += "r";
-                pathPosition = pathPosition - 1;
-            }
+            output(shortestPath);
         }
-        System.out.println(shortestPath);
+    }
+
+    private void output (String paPath) {
+        paPath = new StringBuilder(paPath).reverse().toString();
+        String formated = String.valueOf(paPath.charAt(0));
+        for (int i = 1; i < paPath.length(); i++) {
+            formated += ", " + String.valueOf(paPath.charAt(i));
+        }
+        System.out.println(formated);
     }
 
     private boolean checkAllVisited() {
@@ -108,11 +118,11 @@ public class FindPathAlgorithm {
     }
 
     private void checkNeighbours() {
-        //check neighbours if shortest distance is lower relax and set previous vertex
+        //check neighbours if shortest distance is lower if yes update and set previous vertex
 
         //up neighbour
         int checkedVertex = 0;
-        if(r - columns > -1 && r - columns != '#' && !visited[r - columns]) {
+        if(r - columns > -1  && !visited[r - columns]) {
             checkedVertex = r - columns;
             int dChecked = d[checkedVertex];
             if( d[checkedVertex] > d[r] + 1) {
@@ -122,39 +132,46 @@ public class FindPathAlgorithm {
             }
         }
         //right neighbour
-        if((r + 1) % columns != 0  && r + 1  != '#' && !visited[r + 1]) {
+        if((r + 1) % columns != 0  && !visited[r + 1]) {
             checkedVertex = r + 1;
             int dChecked = d[checkedVertex];
-            if (d[checkedVertex] > d[r] + 1) {
-                d[checkedVertex] = d[r] + 1;
-                x[checkedVertex] = r;
-                System.out.println("R Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
-            }
-        }
-        //down neighbour
-            if(r + columns < size && r + columns  != '#' && !visited[r + columns]) {
-                checkedVertex = r + columns;
-                int dChecked = d[checkedVertex];
+            if(d[r] != Integer.MAX_VALUE) {
                 if (d[checkedVertex] > d[r] + 1) {
                     d[checkedVertex] = d[r] + 1;
                     x[checkedVertex] = r;
-                    System.out.println(" D Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                    System.out.println("R Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                }
+            }
+        }
+        //down neighbour
+            if(r + columns < size && !visited[r + columns]) {
+                checkedVertex = r + columns;
+                int dChecked = d[checkedVertex];
+                if(d[r] != Integer.MAX_VALUE) {
+                    if (d[checkedVertex] > d[r] + 1) {
+                        d[checkedVertex] = d[r] + 1;
+                        x[checkedVertex] = r;
+                        System.out.println(" D Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                    }
                 }
             }
         //left neighbour
                 if(r % columns != 0  && r - 1  != '#' && !visited[r -1]) {
                     checkedVertex = r - 1;
                     int dChecked = d[checkedVertex];
-                    if (d[checkedVertex] > d[r] + 1) {
-                        d[checkedVertex] = d[r] + 1;
-                        x[checkedVertex] = r;
-                        System.out.println("L Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                    if(d[r] != Integer.MAX_VALUE) {
+                        if (d[checkedVertex] > d[r] + 1) {
+                            d[checkedVertex] = d[r] + 1;
+                            x[checkedVertex] = r;
+                            System.out.println("L Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                        }
                     }
                 }
         visited[r] = true;
     }
 
     private int checkCurrentVertex() {
+        //finding vertex with lowest d which was not visited yet
         int lowest = Integer.MAX_VALUE;
         int vertex = -1;
         for (int i = 0; i < size; i++) {
