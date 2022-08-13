@@ -2,13 +2,7 @@ package com.company;
 
 import java.util.ArrayList;
 
-public class FindPathAlgorithm {
-
-    /*private char[][] maze;
-    private int[][] r;              //current vertex
-    private boolean[][] visited;    //true if visited
-    private int[][] d;              //shortest distance from start S
-    private int[][][] x;*/
+public class FindPathAlgorithm implements Runnable{
 
     //Using Dijsktra shortest path algorithm
 
@@ -23,7 +17,13 @@ public class FindPathAlgorithm {
     private int endPos;
     private int start;
 
-    public FindPathAlgorithm(char[] paMaze, int paRows, int paColumns, int paStart, int paEndPos) {
+
+    public enum InputType {
+        KEYBOARD,
+        FILE
+    }
+    private InputType type;
+    public FindPathAlgorithm(char[] paMaze, int paRows, int paColumns, int paStart, int paEndPos, InputType paType) {
          maze = paMaze;
          columns = paColumns;
          rows = paRows;
@@ -34,27 +34,32 @@ public class FindPathAlgorithm {
          d = new int[size];
          x = new int[size];
          visited = new boolean[size];
+         type = paType;
     }
 
     private void showMaze() {
         for (int i = 0; i < maze.length; i++) {
-            System.out.print(maze[i]);
+            //System.out.print(maze[i]);
         }
     }
 
     private void showShortestPaths() {
         for (int i = 0; i < d.length; i++) {
-            System.out.println(d[i]);
+            //System.out.println(d[i]);
         }
     }
 
+    @Override
+    public void run() {
+        startAlgorithm();
+    }
     public String startAlgorithm() {
         setUp();
         while(!checkAllVisited()) {
-            showMaze();
+            //showMaze();
             r = checkCurrentVertex();
-            showShortestPaths();
-            System.out.println("Current vertex: " + r);
+            //showShortestPaths();
+            //System.out.println("Current vertex: " + r);
             checkNeighbours();
         }
         return findShortestPath();
@@ -103,6 +108,13 @@ public class FindPathAlgorithm {
         for (int i = 1; i < paPath.length(); i++) {
             formated += ", " + String.valueOf(paPath.charAt(i));
         }
+        String inputType = "";
+        if (type == InputType.KEYBOARD)
+            inputType = "keyboard";
+        else
+            inputType = "file";
+
+        System.out.println("Output from: " + inputType + " input");
         System.out.println(formated);
         return formated;
     }
@@ -131,7 +143,7 @@ public class FindPathAlgorithm {
                 if (d[checkedVertex] > d[r] + 1) {
                     d[checkedVertex] = d[r] + 1;
                     x[checkedVertex] = r;
-                    System.out.println("UP Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                    //System.out.println("UP Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                 }
             }
         }
@@ -143,7 +155,7 @@ public class FindPathAlgorithm {
                 if (d[checkedVertex] > d[r] + 1) {
                     d[checkedVertex] = d[r] + 1;
                     x[checkedVertex] = r;
-                    System.out.println("R Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                    //System.out.println("R Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                 }
             }
         }
@@ -155,7 +167,7 @@ public class FindPathAlgorithm {
                     if (d[checkedVertex] > d[r] + 1) {
                         d[checkedVertex] = d[r] + 1;
                         x[checkedVertex] = r;
-                        System.out.println(" D Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                        //System.out.println(" D Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                     }
                 }
             }
@@ -167,7 +179,7 @@ public class FindPathAlgorithm {
                         if (d[checkedVertex] > d[r] + 1) {
                             d[checkedVertex] = d[r] + 1;
                             x[checkedVertex] = r;
-                            System.out.println("L Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                           //System.out.println("L Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                         }
                     }
                 }
@@ -180,10 +192,10 @@ public class FindPathAlgorithm {
         int vertex = -1;
         for (int i = 0; i < size; i++) {
             if (d[i] <= lowest && !visited[i]) {
-                System.out.println("D of " + i + " is " + d[i]);
+                //System.out.println("D of " + i + " is " + d[i]);
                 lowest = d[i];
                 vertex = i;
-                System.out.println("New lowest vertex found: " + vertex + " with d of: " + lowest);
+                //System.out.println("New lowest vertex found: " + vertex + " with d of: " + lowest);
             }
         }
         return vertex;

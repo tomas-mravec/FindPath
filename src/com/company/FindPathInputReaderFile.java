@@ -42,7 +42,7 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
             int z = x;
             if (line2 != null) {
                 for (x = x; x < line2.length() + z; x++) {
-                    System.out.println("X: " + x + " Y: " + y + " Line length: " + line2.length() + " Z: " + z);
+                    //System.out.println("X: " + x + " Y: " + y + " Line length: " + line2.length() + " Z: " + z);
                     maze[x] = line2.charAt(y);
                     if (maze[x] == 'S')
                         start = x;

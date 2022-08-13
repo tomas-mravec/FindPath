@@ -13,14 +13,14 @@ class FindPathAlgorithmTest {
     @Test
     void shortestPathShouldExists() throws IOException {
         FindPathInputReaderFile fpirfil = new FindPathInputReaderFile("test_exists.txt");
-        FindPathAlgorithm fpalg = new FindPathAlgorithm(fpirfil.getInput(), fpirfil.getRows(), fpirfil.getColumns(), fpirfil.getStart(), fpirfil.getEndPos());
+        FindPathAlgorithm fpalg = new FindPathAlgorithm(fpirfil.getInput(), fpirfil.getRows(), fpirfil.getColumns(), fpirfil.getStart(), fpirfil.getEndPos(), FindPathAlgorithm.InputType.FILE);
         assertEquals("d, d, d, r, d, d, r, r",fpalg.startAlgorithm());
     }
 
     @Test
     void shortestPathShouldNOTExists() throws IOException {
         FindPathInputReaderFile fpirfil = new FindPathInputReaderFile("test_blocked.txt");
-        FindPathAlgorithm fpalg = new FindPathAlgorithm(fpirfil.getInput(), fpirfil.getRows(), fpirfil.getColumns(), fpirfil.getStart(), fpirfil.getEndPos());
+        FindPathAlgorithm fpalg = new FindPathAlgorithm(fpirfil.getInput(), fpirfil.getRows(), fpirfil.getColumns(), fpirfil.getStart(), fpirfil.getEndPos(), FindPathAlgorithm.InputType.FILE);
         assertEquals("",fpalg.startAlgorithm());
     }
 }
