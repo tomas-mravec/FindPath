@@ -1,28 +1,27 @@
 package com.company;
 
-import java.util.ArrayList;
 
+//Implementing by using Dijsktra shortest path algorithm
 public class FindPathAlgorithm implements Runnable{
 
-    //Using Dijsktra shortest path algorithm
-
     private char[] maze;
-    private int r;              //current vertex
+    private int r;               //current vertex
     private boolean[] visited;    //true if visited
     private int[] d;              //shortest distance from start S
     private int[] x;              //previous vertex
-    private int size;
-    private int columns;
-    private int rows;
-    private int endPos;
-    private int start;
+    private final int size;
+    private final int columns;
+    private final int rows;
+    private final int endPos;
+    private final int start;
 
 
     public enum InputType {
         KEYBOARD,
         FILE
     }
-    private InputType type;
+    private InputType input;
+
     public FindPathAlgorithm(char[] paMaze, int paRows, int paColumns, int paStart, int paEndPos, InputType paType) {
          maze = paMaze;
          columns = paColumns;
@@ -34,41 +33,28 @@ public class FindPathAlgorithm implements Runnable{
          d = new int[size];
          x = new int[size];
          visited = new boolean[size];
-         type = paType;
-    }
-
-    private void showMaze() {
-        for (int i = 0; i < maze.length; i++) {
-            //System.out.print(maze[i]);
-        }
-    }
-
-    private void showShortestPaths() {
-        for (int i = 0; i < d.length; i++) {
-            //System.out.println(d[i]);
-        }
+         input = paType;
     }
 
     @Override
     public void run() {
         startAlgorithm();
     }
+
+    //main cycle of the algorithm
     public String startAlgorithm() {
         setUp();
         while(!checkAllVisited()) {
-            //showMaze();
             r = checkCurrentVertex();
-            //showShortestPaths();
-            //System.out.println("Current vertex: " + r);
             checkNeighbours();
         }
         return findShortestPath();
     }
 
+    //finds shortest path from S to X by going reverse
     private String findShortestPath() {
         String shortestPath = "";
         int pathPosition = endPos;
-        System.out.println("Looking for shortest path");
         if(d[endPos] == Integer.MAX_VALUE) {
             System.out.println("Error, no direct path between Start and End");
             return shortestPath;
@@ -102,6 +88,7 @@ public class FindPathAlgorithm implements Runnable{
         }
     }
 
+    //formating output and putting it on console
     private String output (String paPath) {
         paPath = new StringBuilder(paPath).reverse().toString();
         String formated = String.valueOf(paPath.charAt(0));
@@ -109,16 +96,16 @@ public class FindPathAlgorithm implements Runnable{
             formated += ", " + String.valueOf(paPath.charAt(i));
         }
         String inputType = "";
-        if (type == InputType.KEYBOARD)
+        if (input == InputType.KEYBOARD)
             inputType = "keyboard";
         else
             inputType = "file";
 
-        System.out.println("Output from: " + inputType + " input");
-        System.out.println(formated);
+        System.out.println("Output from: " + inputType + " input -> " + formated);
         return formated;
     }
 
+    //check if all vertices were visited
     private boolean checkAllVisited() {
         boolean allVisited = true;
         for (int i = 0; i < size; i++) {
@@ -131,8 +118,8 @@ public class FindPathAlgorithm implements Runnable{
         return allVisited;
     }
 
+    //check neighbours if shortest distance is lower if yes update and set previous vertex
     private void checkNeighbours() {
-        //check neighbours if shortest distance is lower if yes update and set previous vertex
 
         //up neighbour
         int checkedVertex = 0;
@@ -143,7 +130,6 @@ public class FindPathAlgorithm implements Runnable{
                 if (d[checkedVertex] > d[r] + 1) {
                     d[checkedVertex] = d[r] + 1;
                     x[checkedVertex] = r;
-                    //System.out.println("UP Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                 }
             }
         }
@@ -155,7 +141,6 @@ public class FindPathAlgorithm implements Runnable{
                 if (d[checkedVertex] > d[r] + 1) {
                     d[checkedVertex] = d[r] + 1;
                     x[checkedVertex] = r;
-                    //System.out.println("R Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                 }
             }
         }
@@ -167,7 +152,6 @@ public class FindPathAlgorithm implements Runnable{
                     if (d[checkedVertex] > d[r] + 1) {
                         d[checkedVertex] = d[r] + 1;
                         x[checkedVertex] = r;
-                        //System.out.println(" D Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                     }
                 }
             }
@@ -179,33 +163,46 @@ public class FindPathAlgorithm implements Runnable{
                         if (d[checkedVertex] > d[r] + 1) {
                             d[checkedVertex] = d[r] + 1;
                             x[checkedVertex] = r;
-                           //System.out.println("L Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
                         }
                     }
                 }
         visited[r] = true;
     }
 
+    //finding vertex with lowest d which was not visited yet
     private int checkCurrentVertex() {
-        //finding vertex with lowest d which was not visited yet
+
         int lowest = Integer.MAX_VALUE;
         int vertex = -1;
         for (int i = 0; i < size; i++) {
             if (d[i] <= lowest && !visited[i]) {
-                //System.out.println("D of " + i + " is " + d[i]);
                 lowest = d[i];
                 vertex = i;
-                //System.out.println("New lowest vertex found: " + vertex + " with d of: " + lowest);
             }
         }
         return vertex;
     }
 
+    //at the beginning all distances from start are max value int, starting distance is 0
     private void setUp() {
+        boolean startFound = false;
+        boolean endFound = false;
         for (int i = 0; i < size; i++) {
             d[i] = Integer.MAX_VALUE;
             if(maze[i] == '#')
                 visited[i] = true;
+            if(maze[i] == 'S')
+                startFound = true;
+            if(maze[i] == 'X')
+                endFound = true;
+            if(maze[i] != '.' && maze[i] != 'S' && maze[i] != 'X' && maze[i] != '#') {
+                System.out.println("Wrong character input from file");
+                System.exit(0);
+            }
+        }
+        if (!endFound || !startFound) {
+            System.out.println("Start or End of the maze was not found check your inputs");
+            System.exit(0);
         }
         d[r] = 0;
 

@@ -3,10 +3,8 @@ package com.company;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class FindPathInputReaderFile extends AbstractFindPathInputReader {
-    //private BufferedReader bufReader;
     private String file;
     private int rows;
     private int columns;
@@ -41,8 +39,7 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
             int y = 0;
             int z = x;
             if (line2 != null) {
-                for (x = x; x < line2.length() + z; x++) {
-                    //System.out.println("X: " + x + " Y: " + y + " Line length: " + line2.length() + " Z: " + z);
+                for (; x < line2.length() + z; x++) {
                     maze[x] = line2.charAt(y);
                     if (maze[x] == 'S')
                         start = x;
@@ -56,10 +53,6 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
         bufReader2.close();
 
         return maze;
-    }
-
-    public void printInput() {
-
     }
 
     public int getRows() {return rows;}
