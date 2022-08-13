@@ -9,6 +9,7 @@ public class FindPathInputReaderStdIn extends AbstractFindPathInputReader{
     private int columns;
     private  char maze[];
     private int start;
+    private int endPos;
 
     FindPathInputReaderStdIn() {
         /*reader = new BufferedReader(
@@ -29,17 +30,20 @@ public class FindPathInputReaderStdIn extends AbstractFindPathInputReader{
     public char[] getInput() {
         reader = new Scanner(System.in);
         System.out.println("Lines je: " + rows);
-        //int y = 0;
+
         int x = 0;
         for (int i = 0; i < rows; i++) {
             String line = reader.nextLine();
             int y = 0;
             int z = x;
             for (x=x ;x < line.length() + z; x++) {
-                System.out.println("X: " + x + " Y: " + y + " Line length: " + line.length() + " Z: " + z);
+                //System.out.println("X: " + x + " Y: " + y + " Line length: " + line.length() + " Z: " + z);
                 maze[x] = line.charAt(y);
                 if(maze[x] == 'S')
                     start = x;
+                if(maze[x] == 'X')
+                    endPos = x;
+
                 y++;
             }
             //x += line.length();
@@ -67,4 +71,5 @@ public class FindPathInputReaderStdIn extends AbstractFindPathInputReader{
     public int getRows() {return rows;}
     public int getColumns() {return columns;}
     public int getStart() {return start;}
+    public int getEndPos() {return endPos;}
 }

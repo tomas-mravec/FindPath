@@ -7,7 +7,8 @@ public class FindPath {
     public static void main(String[] args) throws IOException {
 
         FindPathInputReaderStdIn a = new FindPathInputReaderStdIn();
-        FindPathAlgorithm b = new FindPathAlgorithm(a.getInput(), a.getRows(), a.getColumns(), a.getStart());
+        FindPathAlgorithm b = new FindPathAlgorithm(a.getInput(), a.getRows(), a.getColumns(), a.getStart(), a.getEndPos());
+        b.startAlgorithm();
         a.printInput();
 
     }

@@ -8,4 +8,5 @@ public abstract class AbstractFindPathInputReader {
     abstract public int getRows();
     abstract public int getColumns();
     abstract public int getStart();
+    abstract public int getEndPos();
 }

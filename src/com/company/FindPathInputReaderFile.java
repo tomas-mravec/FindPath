@@ -31,5 +31,6 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
     public int getRows() {return 0;}
     public int getColumns() {return 0;}
     public int getStart() {return 0;}
+    public int getEndPos() {return 0;}
 }
 
