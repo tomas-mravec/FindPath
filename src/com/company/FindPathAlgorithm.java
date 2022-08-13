@@ -23,7 +23,7 @@ public class FindPathAlgorithm {
     private int endPos;
     private int start;
 
-    FindPathAlgorithm(char[] paMaze, int paRows, int paColumns, int paStart, int paEndPos) {
+    public FindPathAlgorithm(char[] paMaze, int paRows, int paColumns, int paStart, int paEndPos) {
          maze = paMaze;
          columns = paColumns;
          rows = paRows;
@@ -48,7 +48,7 @@ public class FindPathAlgorithm {
         }
     }
 
-    public void startAlgorithm() {
+    public String startAlgorithm() {
         setUp();
         while(!checkAllVisited()) {
             showMaze();
@@ -57,15 +57,16 @@ public class FindPathAlgorithm {
             System.out.println("Current vertex: " + r);
             checkNeighbours();
         }
-        findShortestPath();
+        return findShortestPath();
     }
 
-    private void findShortestPath() {
+    private String findShortestPath() {
         String shortestPath = "";
         int pathPosition = endPos;
         System.out.println("Looking for shortest path");
         if(d[endPos] == Integer.MAX_VALUE) {
             System.out.println("Error, no direct path between Start and End");
+            return shortestPath;
         } else {
 
             //check if up
@@ -92,17 +93,18 @@ public class FindPathAlgorithm {
                     pathPosition = pathPosition - 1;
                 }
             }
-            output(shortestPath);
+            return output(shortestPath);
         }
     }
 
-    private void output (String paPath) {
+    private String output (String paPath) {
         paPath = new StringBuilder(paPath).reverse().toString();
         String formated = String.valueOf(paPath.charAt(0));
         for (int i = 1; i < paPath.length(); i++) {
             formated += ", " + String.valueOf(paPath.charAt(i));
         }
         System.out.println(formated);
+        return formated;
     }
 
     private boolean checkAllVisited() {
@@ -125,10 +127,12 @@ public class FindPathAlgorithm {
         if(r - columns > -1  && !visited[r - columns]) {
             checkedVertex = r - columns;
             int dChecked = d[checkedVertex];
-            if( d[checkedVertex] > d[r] + 1) {
-                d[checkedVertex] = d[r] + 1;
-                x[checkedVertex] = r;
-                System.out.println("UP Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+            if(d[r] != Integer.MAX_VALUE) {
+                if (d[checkedVertex] > d[r] + 1) {
+                    d[checkedVertex] = d[r] + 1;
+                    x[checkedVertex] = r;
+                    System.out.println("UP Neighbour of r: " + r + " is relaxed to: " + (d[r] + 1) + " from " + dChecked);
+                }
             }
         }
         //right neighbour

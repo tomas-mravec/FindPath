@@ -14,7 +14,7 @@ public class FindPathInputReaderFile extends AbstractFindPathInputReader {
     private int start;
     private int endPos;
 
-    FindPathInputReaderFile(String paFile){
+    public FindPathInputReaderFile(String paFile){
         file = paFile;
     }
 
